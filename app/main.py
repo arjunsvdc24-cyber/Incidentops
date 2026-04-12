@@ -599,7 +599,7 @@ async def step(request: Request, body: StepRequest):
     }
 
     response = env.step(action)
-    response.reward -= action_result.penalty
+    response = response.model_copy(update={"reward": response.reward - action_result.penalty})
 
     # Enrich info dict with reasoning trace
     reasoning_trace = {

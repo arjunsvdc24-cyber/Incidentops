@@ -4,7 +4,7 @@ IncidentOps - Deep Trajectory Grader v11.0
 
 Evaluates agent trajectories with comprehensive scoring.
 
-Scoring Breakdown:
+Scoring Breakdown (weights sum to 1.00):
 - 0.25 → correct root cause identified
 - 0.25 → correct fix applied
 - 0.15 → efficiency (steps taken)
