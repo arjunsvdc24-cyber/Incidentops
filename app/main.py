@@ -778,7 +778,6 @@ async def get_tasks():
                       "Look for OutOfMemoryError in the logs"],
             "expected_min_steps": 2,
             "expected_max_steps": 8,
-            "correct_fix": "restart_service",
             "slo_budget_steps": 8,
         },
         {
@@ -799,7 +798,6 @@ async def get_tasks():
                       "Check database-primary connection metrics"],
             "expected_min_steps": 4,
             "expected_max_steps": 14,
-            "correct_fix": "scale_service",
             "slo_budget_steps": 12,
         },
         {
@@ -821,7 +819,6 @@ async def get_tasks():
                       "Correlate deploy timeline with when metrics drifted"],
             "expected_min_steps": 6,
             "expected_max_steps": 20,
-            "correct_fix": "rollback_deployment",
             "slo_budget_steps": 25,
         },
         {
@@ -843,7 +840,6 @@ async def get_tasks():
                       "Check api-gateway throughput — not just error logs"],
             "expected_min_steps": 3,
             "expected_max_steps": 12,
-            "correct_fix": "scale_service",
             "slo_budget_steps": 12,
         },
         {
@@ -865,7 +861,6 @@ async def get_tasks():
                       "High CPU on database-replica is a symptom, not the root cause"],
             "expected_min_steps": 5,
             "expected_max_steps": 16,
-            "correct_fix": "restart_service",
             "slo_budget_steps": 18,
         },
     ]
@@ -888,7 +883,6 @@ async def get_tasks():
                       "restart_service regenerates the cert"],
             "expected_min_steps": 2,
             "expected_max_steps": 6,
-            "correct_fix": "restart_service",
             "slo_budget_steps": 5,
         },
         {
@@ -905,7 +899,6 @@ async def get_tasks():
             "hints": ["Check query_logs for SSL errors AND query_deployments for recent changes"],
             "expected_min_steps": 3,
             "expected_max_steps": 8,
-            "correct_fix": "restart_service",
             "slo_budget_steps": 8,
         },
         # Config Drift (difficulty 2-3)
@@ -924,7 +917,6 @@ async def get_tasks():
                       "query_deployments may show recent changes"],
             "expected_min_steps": 4,
             "expected_max_steps": 10,
-            "correct_fix": "apply_fix",
             "slo_budget_steps": 12,
         },
         {
@@ -942,7 +934,6 @@ async def get_tasks():
                       "Compare configs across affected services"],
             "expected_min_steps": 5,
             "expected_max_steps": 14,
-            "correct_fix": "apply_fix",
             "slo_budget_steps": 15,
         },
         # Data Corruption (difficulty 3-4)
@@ -961,7 +952,6 @@ async def get_tasks():
                       "Compare results quality before and after deploy"],
             "expected_min_steps": 5,
             "expected_max_steps": 16,
-            "correct_fix": "rollback_deployment",
             "slo_budget_steps": 18,
         },
         {
@@ -979,7 +969,6 @@ async def get_tasks():
                       "Check query_deployments for recent schema changes"],
             "expected_min_steps": 6,
             "expected_max_steps": 20,
-            "correct_fix": "rollback_deployment",
             "slo_budget_steps": 22,
         },
         # Network Partition (difficulty 2-3)
@@ -998,7 +987,6 @@ async def get_tasks():
                       "scale_service on the gateway often restores connectivity"],
             "expected_min_steps": 3,
             "expected_max_steps": 10,
-            "correct_fix": "scale_service",
             "slo_budget_steps": 12,
         },
         {
@@ -1016,7 +1004,6 @@ async def get_tasks():
                       "Check query_dependencies output carefully"],
             "expected_min_steps": 5,
             "expected_max_steps": 14,
-            "correct_fix": "scale_service",
             "slo_budget_steps": 16,
         },
         # Slow Downstream (difficulty 2-3)
@@ -1035,7 +1022,6 @@ async def get_tasks():
                       "database-replica slowdown affects search and analytics"],
             "expected_min_steps": 3,
             "expected_max_steps": 10,
-            "correct_fix": "scale_service",
             "slo_budget_steps": 12,
         },
         {
@@ -1053,7 +1039,6 @@ async def get_tasks():
                       "Check query_metrics on the most upstream affected service"],
             "expected_min_steps": 5,
             "expected_max_steps": 14,
-            "correct_fix": "scale_service",
             "slo_budget_steps": 16,
         },
         # Thundering Herd (difficulty 3)
@@ -1072,7 +1057,6 @@ async def get_tasks():
                       "apply_fix with circuit breaker config or restart cache-service"],
             "expected_min_steps": 4,
             "expected_max_steps": 12,
-            "correct_fix": "apply_fix",
             "slo_budget_steps": 14,
         },
         # Zombie Process (difficulty 1-2)
@@ -1091,7 +1075,6 @@ async def get_tasks():
                       "restart_service clears orphaned processes"],
             "expected_min_steps": 2,
             "expected_max_steps": 6,
-            "correct_fix": "restart_service",
             "slo_budget_steps": 5,
         },
         {
@@ -1109,7 +1092,6 @@ async def get_tasks():
                       "restart_service on the origin service"],
             "expected_min_steps": 4,
             "expected_max_steps": 10,
-            "correct_fix": "restart_service",
             "slo_budget_steps": 8,
         },
         # Version Mismatch (difficulty 2-3)
@@ -1128,7 +1110,6 @@ async def get_tasks():
                       "rollback_deployment to previous working version"],
             "expected_min_steps": 3,
             "expected_max_steps": 10,
-            "correct_fix": "rollback_deployment",
             "slo_budget_steps": 12,
         },
         {
@@ -1146,7 +1127,6 @@ async def get_tasks():
                       "Identify the common working version"],
             "expected_min_steps": 5,
             "expected_max_steps": 14,
-            "correct_fix": "rollback_deployment",
             "slo_budget_steps": 15,
         },
     ]
@@ -1175,7 +1155,6 @@ async def get_tasks():
                     "hints": fault.get_symptoms()[:2],
                     "expected_min_steps": diff + 1,
                     "expected_max_steps": (diff + 1) * 4,
-                    "correct_fix": fault.get_symptoms()[0].split()[0] if fault.get_symptoms() else "restart_service",
                     "slo_budget_steps": slo_map.get(diff, 12),
                 })
     except ImportError:
