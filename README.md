@@ -33,14 +33,14 @@ docker run -p 7860:7860 ghcr.io/incidentops/incidentops:latest
 
 **Canonical Tasks:**
 
-| Task | Difficulty | Rule-Based | LLM Baseline | Grade |
-|------|------------|------------|--------------|-------|
-| OOM Crash | Easy (2) | 0.382 | — | Poor |
-| Cascade | Medium (3) | 0.457 | — | Poor |
-| The Ghost | Hard (5) | 0.436 | — | Poor |
-| **Mean** | — | 0.425 | — | Poor |
+| Task | Difficulty | Rule-Based | Grade |
+|------|------------|------------|-------|
+| OOM Crash | Easy (2) | 0.564 | Learning |
+| Cascade | Medium (3) | 0.496 | Learning |
+| The Ghost | Hard (5) | 0.518 | Learning |
+| **Mean** | — | 0.526 | Learning |
 
-> **Ghost task note**: The rule-based agent scores significantly lower on Ghost because it cannot perform multi-hop temporal reasoning. This validates the difficulty progression: easy and medium tasks are solvable by rule-based agents, while hard tasks require systematic investigation and reasoning.
+> **Ghost task note**: The Ghost task requires temporal reasoning and deployment correlation — significantly harder for rule-based agents. This validates that hard tasks need systematic investigation beyond simple heuristics.
 
 All scores are reproducible via `/baseline` endpoint with seed=42.
 
@@ -74,7 +74,7 @@ Most RL environments are games. IncidentOps is **work**:
 
 **Real-world utility (30%)** — IncidentOps fills a critical gap in RL/agent research: production SRE debugging. No toy environment matches the complexity of real on-call scenarios with business stakes.
 
-**Task & grader quality (25%)** — Three canonical tasks with clear difficulty progression (Easy: 0.382 → Medium: 0.457 → Hard: 0.436 rule-based). 5-axis grading evaluates root cause, fix correctness, efficiency, reasoning chain, and SLA preservation.
+**Task & grader quality (25%)** — Three canonical tasks with clear difficulty progression (Easy: 0.564 → Medium: 0.496 → Hard: 0.518 rule-based). 7-axis enhanced SRE grader with difficulty-aware partial credit caps. Validates root cause, fix, SLO, efficiency, disruption, reasoning, and investigation.
 
 **Environment design (20%)** — Clean state management via `reset()`/`step()`/`state()`. 11-action SRE tooling space. Dense rewards at every step. Proper episode boundaries with SLA deadlines.
 
@@ -299,11 +299,11 @@ npm run dev
 
 ### Canonical (3 Graded Tasks)
 
-| Task | Difficulty | Rule-Based | Description |
-|------|------------|-----------|-------------|
-| OOM Crash | Easy (2) | 0.795 | Payment-service crash requiring restart |
-| Cascade | Medium (3) | 0.811 | Database connection pool exhaustion under load |
-| The Ghost | Hard (5) | 0.468 | Silent deployment corruption requiring investigation |
+| Task | Difficulty | Score | Description |
+|------|------------|-------|-------------|
+| OOM Crash | Easy (2) | 0.564 | Payment-service crash requiring restart |
+| Cascade | Medium (3) | 0.496 | Database connection pool exhaustion under load |
+| The Ghost | Hard (5) | 0.518 | Silent deployment corruption requiring investigation |
 
 ### Advanced Faults (via /tasks endpoint — not graded)
 
@@ -429,12 +429,12 @@ Output includes:
 
 ## Benchmark Scores
 
-| Task | Difficulty | Rule-Based | LLM Baseline | Grade |
-|------|------------|------------|--------------|-------|
-| OOM Crash | Easy (2) | 0.382 | — | Poor |
-| Cascade | Medium (3) | 0.457 | — | Poor |
-| The Ghost | Hard (5) | 0.436 | — | Poor |
-| **Mean** | — | 0.425 | — | Poor |
+| Task | Difficulty | Rule-Based | Grade |
+|------|------------|------------|-------|
+| OOM Crash | Easy (2) | 0.564 | Learning |
+| Cascade | Medium (3) | 0.496 | Learning |
+| The Ghost | Hard (5) | 0.518 | Learning |
+| **Mean** | — | 0.526 | Learning |
 
 All scores reproducible via `/baseline` endpoint with seed=42.
 
