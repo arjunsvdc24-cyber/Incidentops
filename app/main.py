@@ -79,6 +79,7 @@ from app.db.schemas import (
     LeaderboardEntryResponse, LeaderboardResponse, StatsResponse,
 )
 from app.models import ActionType, StepRequest, StepResponse, VALID_SERVICES
+from app.__init__ import __version__
 from app.environment import IncidentEnv, EnvironmentConfig, make_env
 from app.fault_injector import FaultType
 from app.grader import grade_trajectory
@@ -154,7 +155,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="IncidentOps",
     description="Production Incident Response RL Environment — SRE Training Platform",
-    version="15.0",
+    version=__version__,
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
@@ -473,7 +474,7 @@ async def get_openenv_yaml():
 async def api_info():
     return {
         "name": "IncidentOps",
-        "version": "15.0",
+        "version": __version__,
         "description": "SRE Incident Response RL Training Platform",
         "features": [
             "Anti-brute-force detection",
@@ -505,7 +506,7 @@ async def health():
     env = get_env()
     return {
         "status": "healthy",
-        "version": "15.1",
+        "version": __version__,
         "components": {
             "environment": "ok",
             "grader": "ok",
@@ -725,7 +726,7 @@ async def mcp_endpoint(request: Request):
     responses = {
         "environment.info": {
             "name": "IncidentOps",
-            "version": "15.0",
+            "version": __version__,
             "description": "Production incident response RL environment",
         },
         "environment.capabilities": {
@@ -1404,6 +1405,10 @@ async def run_baseline(request: Request, body: BaselineRequest):
                 "easy": round(result["final_score"], 6) if difficulty == 2 else None,
                 "medium": round(result["final_score"], 6) if difficulty == 3 else None,
                 "hard": round(result["final_score"], 6) if difficulty == 5 else None,
+                "trajectory": result.get("trajectory"),
+                "steps": result.get("steps"),
+                "total_reward": result.get("total_reward"),
+                "grade": result.get("grade"),
             }
 
         # No task provided — run all 3 canonical tasks
@@ -1428,6 +1433,7 @@ async def run_baseline(request: Request, body: BaselineRequest):
         results["hard"] = results.get("ghost_corruption")
         results["agent_type"] = "rule_based"
         results["success"] = True
+        results["version"] = __version__
         return results
     except Exception as e:  # pragma: no cover
         return JSONResponse(status_code=500, content={"error": str(e), "success": False})  # pragma: no cover
